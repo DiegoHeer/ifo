@@ -12,6 +12,9 @@ class Backend:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
 
+    def save_workbook(self, wb_path):
+        pass
+
     def monthly_spending_block(self):
         # Updates the values in the cells related to the specific function named topic
         pass
