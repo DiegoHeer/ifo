@@ -27,7 +27,6 @@ class Database:
 
         # xlwings parameters
         self.wb = xw.Book(self.wb_path)
-        self.ws = None
 
     def __enter__(self):
         return self
