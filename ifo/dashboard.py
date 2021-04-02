@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 import xlwings as xw
 from xlwings import constants as xw_constants
 from os.path import join
@@ -135,6 +135,27 @@ class Dashboard:
             current_validation_values_dict[validation_type] = self.ws.Range(validation_type).Value
 
         return current_validation_values_dict
+
+    def update_last_transaction_entry(self, df):
+        # Searches the database for the last transaction made in het specific currency
+
+        # if database input parameter is none, get database dataframe
+        if df is None:
+            df = self.get_database_dataframe()
+
+        # Get currency selection
+        validation_dict = self.get_all_current_data_validation_selections()
+        currency = validation_dict["CurrencyValidation"]
+
+        # Apply filter to database to obtain all dates related to the currency
+        df = df.loc[df["Currency"] == currency]
+
+        # Search for last transaction date
+        df['Date'] = pd.to_datetime(df['Date'])
+        last_date = df['Date'].max()
+
+        # Update the last entry date in the dashboard
+        self.ws.Range("LastTransactionEntry").Value = last_date.strftime('%d-%m-%Y')
 
 
 def tester():
