@@ -1,7 +1,7 @@
 from os.path import join
 import pathlib
 import xlwings as xw
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import calendar
 
@@ -238,21 +238,45 @@ class Backend:
             self.ws.Range(f'ThisMonth{id_parameter}{i + 1}').Value = balance_selected_account_this_month
             self.ws.Range(f'LastMonth{id_parameter}{i + 1}').Value = balance_selected_account_last_month
 
-    def week_quarter_spending_block(self, unfiltered_df=None):
+    def week_quarter_spending_and_investment_block(self, unfiltered_df=None, investment_bool=False):
         # Updates the values in the cells related to the specific function named topic
 
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Defines parameters based on the type of block that will be updated: checking or saving
+        if investment_bool is True:
+            focus_parameter = "MonthInvestment"
+            transaction_type = "investment"
+            sum_column = "Input Value"
+        else:
+            focus_parameter = "WeekSpending"
+            transaction_type = "spending"
+            sum_column = "Output Value"
 
-    def month_quarter_investments_block(self, unfiltered_df=None):
-        # Updates the values in the cells related to the specific function named topic
+        # Calculate current week spending or month investment
+        today = datetime.today().date()
+        start_date = today - timedelta(days=today.weekday())
+        end_date = start_date + timedelta(days=6)
 
-        # Check if database dataframe is provided. If not, gets it
-        unfiltered_df = get_unfiltered_database(unfiltered_df)
+        period_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column=sum_column,
+                                                      start_date=start_date,
+                                                      end_date=end_date,
+                                                      transaction_type=transaction_type)
 
-        pass
+        self.ws.Range(focus_parameter).Value = period_value
+
+        # Calculate and fill in quarter spending or investment this year
+        for i in range(1, 5):
+            start_date = datetime(year=datetime.today().year, month=(3 * i - 2), day=1).date()
+            end_date = start_date + relativedelta(months=3) - timedelta(days=1)
+
+            quarter_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column=sum_column,
+                                                           start_date=start_date,
+                                                           end_date=end_date,
+                                                           transaction_type=transaction_type)
+
+            self.ws.Range(f"Quarter{i}{transaction_type.capitalize()}").Value = quarter_value
 
     def recent_transactions_block(self, unfiltered_df=None):
         # Updates the values in the cells related to the specific function named topic
@@ -260,7 +284,28 @@ class Backend:
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Apply a filter to obtain the dataframe from the last 365 days in current currency
+        today = datetime.today().date()
+        start_date = today - relativedelta(years=1)
+        end_date = today
+
+        filter_dict = self.create_filter_dict(start_date=start_date, end_date=end_date)
+        filtered_df = filter_dataframe(unfiltered_df, filter_dict)
+
+        # Get the last 10 rows from the dataframe
+        df_tail = filtered_df.tail(10)
+
+        # Fill in the values of the Recent Transactions Table
+        for i in range(1, 11):
+            self.ws.Range(f"RecentDate{i}").Value = df_tail['Date'].iloc[i]
+            self.ws.Range(f"RecentType{i}").Value = df_tail['Type'].iloc[i]
+            self.ws.Range(f"RecentCategory{i}").Value = df_tail['Category'].iloc[i]
+            self.ws.Range(f"RecentCurrency{i}").Value = df_tail['Currency'].iloc[i]
+            self.ws.Range(f"RecentInputValue{i}").Value = df_tail['Input Value'].iloc[i]
+            self.ws.Range(f"RecentInputAccount{i}").Value = df_tail['Input Account'].iloc[i]
+            self.ws.Range(f"RecentOutputValue{i}").Value = df_tail['Output Value'].iloc[i]
+            self.ws.Range(f"RecentOutputAccount{i}").Value = df_tail['Output Account'].iloc[i]
+            self.ws.Range(f"RecentDescription{i}").Value = df_tail['Description'].iloc[i]
 
     def average_day_spending_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -296,11 +341,8 @@ class Backend:
 
 
 def tester():
-    # test = Backend()
-    print(first_day_this_month())
-    print(last_day_this_month())
-    print(first_day_last_month())
-    print(last_day_last_month())
+    test = Backend()
+    test.week_quarter_spending_block()
 
 
 if __name__ == '__main__':
