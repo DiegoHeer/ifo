@@ -156,7 +156,3 @@ class Dashboard:
 
         # Update the last entry date in the dashboard
         self.ws.Range("LastTransactionEntry").Value = last_date.strftime('%d-%m-%Y')
-
-
-def tester():
-    test = Dashboard()

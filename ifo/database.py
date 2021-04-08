@@ -203,6 +203,22 @@ class Database:
             elif key == "Description":
                 df = df.loc[df[key].str.contains(value)]
 
+            elif key == "Input Account Type":
+                if value == "checking accounts":
+                    df = df.loc[~df["Input Account"].str.contains('saving')]
+                elif value == "saving accounts":
+                    df = df.loc[df["Input Account"].str.contains('saving')]
+                else:
+                    pass
+
+            elif key == "Output Account Type":
+                if value == "checking accounts":
+                    df = df.loc[~df["Output Account"].str.contains('saving')]
+                elif value == "saving accounts":
+                    df = df.loc[df["Output Account"].str.contains('saving')]
+                else:
+                    pass
+
             else:
                 df = df.loc[df[key] == value]
 
