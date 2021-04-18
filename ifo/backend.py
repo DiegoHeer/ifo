@@ -4,6 +4,7 @@ import xlwings as xw
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import calendar
+import itertools
 
 import database
 
@@ -60,6 +61,22 @@ class Backend:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
+
+    def get_validation_end_date(self):
+        # Extracts the date selected through cell validation in the Dashboard sheet
+        ws = self.wb.sheets["Dashboard"].api
+
+        month_validation = int(ws.Range("MonthValidation").Value)
+        year_validation = int(ws.Range("YearValidation").Value)
+
+        last_day_month = calendar.monthrange(year_validation, month_validation)[1]
+
+        validation_end_date = datetime(year=year_validation, month=month_validation, day=last_day_month).date()
+        return validation_end_date
+
+    def get_validation_start_date(self):
+        validation_end_date = self.get_validation_end_date()
+        return validation_end_date.replace(day=1)
 
     def create_filter_dict(self, start_date, end_date, transaction_type=None, category=None, input_account=None,
                            output_account=None, input_account_type=None, output_account_type=None):
@@ -313,7 +330,41 @@ class Backend:
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Average spending
+        # Get the value of this month spending
+        this_month_spending = self.ws.Range("ThisMonthSpend").Value
+
+        # Get the maximum amount of days in this month
+        maximum_days_in_month = last_day_this_month().day
+
+        # Return the result to the backend sheet
+        self.ws.Range("AverageSpending").Value = round(this_month_spending / maximum_days_in_month, 2)
+
+        # Maximal spending
+        # Create a filter dictionary for the spending this month
+        start_date = first_day_this_month()
+        end_date = last_day_this_month()
+        filter_dict = self.create_filter_dict(start_date, end_date, transaction_type="spending")
+        this_month_spending_df = filter_dataframe(unfiltered_df, filter_dict)
+
+        # Get the maximum spending value
+        maximum_spending = this_month_spending_df["Output Value"].max()
+        self.ws.Range("MaximalSpending").Value = maximum_spending
+
+        # Get the minimal spending
+        minimal_spending = this_month_spending_df['Output Value'].min()
+        self.ws.Range("MinimalSpending").Value = minimal_spending
+
+        # Get today's spending
+        today = datetime.today().date()
+        today_spending_df = this_month_spending_df.loc[this_month_spending_df["Date"] == today]
+        today_spending = today_spending_df["Output Value"].sum()
+        self.ws.Range("TodaySpending").Value = today_spending
+
+        # Last month average spending
+        last_month_spending = self.ws.Range("LastMonthSpend").Value
+        maximum_days_last_month = last_day_last_month().day
+        self.ws.Range("LastMonthAvSpending").Value = maximum_days_last_month
 
     def spending_per_category_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -321,7 +372,33 @@ class Backend:
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Get the list of categories available
+        category_tuple = self.ws.Range("ListedCategories").Value
+        category_list = [item for t in category_tuple for item in t]
+
+        # The calculation is performed for every listed category for all 12 months
+        # Obtain first a filtered dataframe for spending based on the complete year of display
+        end_year_number = int(self.ws.Range("EndYearNumber").Value)
+        end_month_number = int(self.ws.Range("EndMonthNumber").Value)
+
+        last_day = calendar.monthrange(end_year_number, end_month_number)[1]
+        year_end_date = datetime(year=end_year_number, month=end_month_number, day=last_day).date()
+        year_start_date = year_end_date + relativedelta(days=1) - relativedelta(years=1)
+
+        filter_dict = self.create_filter_dict(year_start_date, year_end_date, transaction_type="spending")
+        year_spending_df = filter_dataframe(unfiltered_df, filter_dict)
+
+        for category in category_list:
+            for month_num in range(0, 12):
+                month_start_date = year_start_date + relativedelta(months=month_num)
+                month_end_date = month_start_date + relativedelta(months=1) - relativedelta(days=1)
+
+                category_spending_sum = self.get_sum_value_filtered_df(year_spending_df, sum_column="Output Value",
+                                                                       start_date=month_start_date,
+                                                                       end_date=month_end_date, category=category)
+
+                named_range = f"Spending{category.capitalize()}MonthNum{month_num + 1}"
+                self.ws.Range(named_range).Value = category_spending_sum
 
     def investment_portfolio_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -329,7 +406,29 @@ class Backend:
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Calculate the total value of investments made for stocks and bonds until month and year validation
+        start_date = unfiltered_df['Date'].min()
+        end_date = self.get_validation_end_date()
+
+        # General function for obtaining the total invested value for bonds and stocks
+        def total_invested_value(ws, dataframe, start_date, end_date, category, output_range_name):
+            output_value = self.get_sum_value_filtered_df(dataframe, "Output Value", start_date, end_date,
+                                                          transaction_type="investment", category=category)
+            input_value = self.get_sum_value_filtered_df(dataframe, "Output Value", start_date, end_date,
+                                                         transaction_type="investment", category=category)
+
+            ws.Range(output_range_name).Value = output_value - input_value
+
+        # Bonds total invested value
+        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "bonds", "TotalInvestedBonds")
+
+        # Stocks total invested value
+        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "stocks", "TotalInvestedStocks")
+
+        # Obtain the total investments for one month before the validation end date
+        end_date = end_date - relativedelta(months=1)
+        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "bonds", "TotalInvestedBonds")
+        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "stocks", "TotalInvestedStocks")
 
     def spending_per_type_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -337,12 +436,39 @@ class Backend:
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        pass
+        # Get a list of the possible transactions
+        transaction_list = ["spending", "earning", "change", "investment"]
+
+        # The calculation is performed for every listed category for all 12 months
+        # Obtain first a filtered dataframe for spending based on the complete year of display
+        end_year_number = int(self.ws.Range("EndYearNumber").Value)
+        end_month_number = int(self.ws.Range("EndMonthNumber").Value)
+
+        last_day = calendar.monthrange(end_year_number, end_month_number)[1]
+        year_end_date = datetime(year=end_year_number, month=end_month_number, day=last_day).date()
+        year_start_date = year_end_date + relativedelta(days=1) - relativedelta(years=1)
+
+        for transaction in transaction_list:
+            for month_num in range(0, 12):
+                month_start_date = year_start_date + relativedelta(months=month_num)
+                month_end_date = month_start_date + relativedelta(months=1) - relativedelta(days=1)
+
+                if transaction == "earning":
+                    sum_column = "Input Value"
+                else:
+                    sum_column = "Output Value"
+
+                transaction_sum = self.get_sum_value_filtered_df(unfiltered_df, sum_column=sum_column,
+                                                                 start_date=month_start_date,
+                                                                 end_date=month_end_date, transaction_type=transaction)
+
+                named_range = f"{transaction.capitalize()}MonthNum{month_num + 1}"
+                self.ws.Range(named_range).Value = transaction_sum
 
 
 def tester():
     test = Backend()
-    test.week_quarter_spending_block()
+    test.spending_per_category_chart()
 
 
 if __name__ == '__main__':
