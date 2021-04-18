@@ -4,7 +4,6 @@ import xlwings as xw
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import calendar
-import itertools
 
 import database
 
@@ -54,8 +53,6 @@ class Backend:
         self.wb = xw.Book(self.wb_path)
         self.ws = self.wb.sheets["Backend"].api
 
-        pass
-
     def __enter__(self):
         return self
 
@@ -82,7 +79,7 @@ class Backend:
                            output_account=None, input_account_type=None, output_account_type=None):
         # Creates a dictionary that serves a filter to gather a defined dataframe to extract information
         filter_dict = dict()
-        filter_dict['Currency'] = self.ws.Range("CurrencyValidation").Value
+        filter_dict['Currency'] = self.wb.sheets["Dashboard"].api.Range("CurrencyValidation").Value
         filter_dict['Start Date'] = start_date
         filter_dict['End Date'] = end_date
 
@@ -468,7 +465,7 @@ class Backend:
 
 def tester():
     test = Backend()
-    test.spending_per_category_chart()
+    test.monthly_spending_block()
 
 
 if __name__ == '__main__':

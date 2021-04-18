@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import os
 from os.path import join
 from datetime import datetime
@@ -62,6 +63,9 @@ class Database:
 
         # Extract data into dataframe using pandas
         self.excel_df = pd.read_excel(wb_path, sheet_name=sheet_name, engine='openpyxl')
+
+        # Remove nans from dataframe
+        self.excel_df = self.excel_df.replace(np.nan, "", regex=True)
 
         return self.excel_df
 
@@ -182,17 +186,17 @@ class Database:
             df = self.database_df
 
         # Converts column with dates as string in dataframe to datetime format
-        df['Date'] = pd.to_datetime(df['Date'])
+        df['Date'] = pd.to_datetime(df['Date']).dt.date
 
         # Filter out per column type
         for key, value in filter_dict.items():
             if key == "Start Date":
-                value = datetime.strptime(value, "%Y-%m-%d")
-                df = df.loc[df[key] >= value]
+                # value = datetime.strptime(value, "%Y-%m-%d")
+                df = df.loc[df["Date"] >= value]
 
             elif key == "End Date":
-                value = datetime.strptime(value, "%Y-%m-%d")
-                df = df.loc[df[key] <= value]
+                # value = datetime.strptime(value, "%Y-%m-%d")
+                df = df.loc[df["Date"] <= value]
 
             elif key == "Minimum Input Value" or key == "Minimum Output Value":
                 df = df.loc[df[key] >= value]
