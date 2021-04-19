@@ -8,24 +8,6 @@ import calendar
 import database
 
 
-def first_day_this_month():
-    return datetime.today().replace(day=1).date()
-
-
-def last_day_this_month():
-    today = datetime.today().date()
-    last_day_month = calendar.monthrange(today.year, today.month)[1]
-    return datetime(year=today.year, month=today.month, day=last_day_month).date()
-
-
-def first_day_last_month():
-    return first_day_this_month() - relativedelta(months=1)
-
-
-def last_day_last_month():
-    return first_day_this_month() - relativedelta(days=1)
-
-
 def get_unfiltered_database(df):
     # Function gets the original database if none is provided in the parent method/function
     if df is None:
@@ -63,17 +45,26 @@ class Backend:
         # Extracts the date selected through cell validation in the Dashboard sheet
         ws = self.wb.sheets["Dashboard"].api
 
-        month_validation = int(ws.Range("MonthValidation").Value)
+        month_validation_name = ws.Range("MonthValidation").Value
+        month_validation_num = datetime.strptime(month_validation_name, "%B").month
         year_validation = int(ws.Range("YearValidation").Value)
 
-        last_day_month = calendar.monthrange(year_validation, month_validation)[1]
+        last_day_month = calendar.monthrange(year_validation, month_validation_num)[1]
 
-        validation_end_date = datetime(year=year_validation, month=month_validation, day=last_day_month).date()
+        validation_end_date = datetime(year=year_validation, month=month_validation_num, day=last_day_month).date()
         return validation_end_date
 
     def get_validation_start_date(self):
         validation_end_date = self.get_validation_end_date()
         return validation_end_date.replace(day=1)
+
+    def get_validation_last_month_start_date(self):
+        validation_start_date = self.get_validation_start_date()
+        return validation_start_date - relativedelta(months=1)
+
+    def get_validation_last_month_end_date(self):
+        validation_start_date = self.get_validation_start_date()
+        return validation_start_date - relativedelta(days=1)
 
     def create_filter_dict(self, start_date, end_date, transaction_type=None, category=None, input_account=None,
                            output_account=None, input_account_type=None, output_account_type=None):
@@ -115,11 +106,11 @@ class Backend:
 
     def get_account_balance(self, unfiltered_df, month_selection, account):
         if month_selection == "this month":
-            start_date = first_day_this_month()
-            end_date = last_day_this_month()
+            start_date = self.get_validation_start_date()
+            end_date = self.get_validation_end_date()
         else:
-            start_date = first_day_last_month()
-            end_date = last_day_last_month()
+            start_date = self.get_validation_last_month_start_date()
+            end_date = self.get_validation_last_month_end_date()
 
         input_value = self.get_sum_value_filtered_df(unfiltered_df, "Input Value", start_date=start_date,
                                                      end_date=end_date, input_account=account)
@@ -131,11 +122,11 @@ class Backend:
 
     def get_total_balance(self, unfiltered_df, month_selection, account_type):
         if month_selection == "this month":
-            start_date = first_day_this_month()
-            end_date = last_day_this_month()
+            start_date = self.get_validation_start_date()
+            end_date = self.get_validation_end_date()
         else:
-            start_date = first_day_last_month()
-            end_date = last_day_last_month()
+            start_date = self.get_validation_last_month_start_date()
+            end_date = self.get_validation_last_month_end_date()
 
         input_value = self.get_sum_value_filtered_df(unfiltered_df, "Input Value", start_date=start_date,
                                                      end_date=end_date, input_account_type=account_type)
@@ -153,14 +144,14 @@ class Backend:
 
         # Calculate the spending value of this month
         spending_this_month = self.get_sum_value_filtered_df(unfiltered_df, "Output Value",
-                                                             start_date=first_day_this_month(),
-                                                             end_date=last_day_this_month(),
+                                                             start_date=self.get_validation_start_date(),
+                                                             end_date=self.get_validation_end_date(),
                                                              transaction_type='spending')
 
         # Calculate the spending from last month
         spending_last_month = self.get_sum_value_filtered_df(unfiltered_df, "Output Value",
-                                                             start_date=first_day_last_month(),
-                                                             end_date=last_day_last_month(),
+                                                             start_date=self.get_validation_last_month_start_date(),
+                                                             end_date=self.get_validation_last_month_end_date(),
                                                              transaction_type='spending')
 
         # Fill in the backend sheet with calculations
@@ -175,14 +166,14 @@ class Backend:
 
         # Calculate the spending value of this month
         earning_this_month = self.get_sum_value_filtered_df(unfiltered_df, "Input Value",
-                                                            start_date=first_day_this_month(),
-                                                            end_date=last_day_this_month(),
+                                                            start_date=self.get_validation_start_date(),
+                                                            end_date=self.get_validation_end_date(),
                                                             transaction_type='earning')
 
         # Calculate the spending from last month
         earning_last_month = self.get_sum_value_filtered_df(unfiltered_df, "Input Value",
-                                                            start_date=first_day_last_month(),
-                                                            end_date=last_day_last_month(),
+                                                            start_date=self.get_validation_last_month_start_date(),
+                                                            end_date=self.get_validation_last_month_end_date(),
                                                             transaction_type='earning')
 
         # Fill in the backend sheet with calculations
@@ -332,15 +323,15 @@ class Backend:
         this_month_spending = self.ws.Range("ThisMonthSpend").Value
 
         # Get the maximum amount of days in this month
-        maximum_days_in_month = last_day_this_month().day
+        maximum_days_in_month = self.get_validation_end_date().day
 
         # Return the result to the backend sheet
         self.ws.Range("AverageSpending").Value = round(this_month_spending / maximum_days_in_month, 2)
 
         # Maximal spending
         # Create a filter dictionary for the spending this month
-        start_date = first_day_this_month()
-        end_date = last_day_this_month()
+        start_date = self.get_validation_start_date()
+        end_date = self.get_validation_end_date()
         filter_dict = self.create_filter_dict(start_date, end_date, transaction_type="spending")
         this_month_spending_df = filter_dataframe(unfiltered_df, filter_dict)
 
@@ -360,8 +351,8 @@ class Backend:
 
         # Last month average spending
         last_month_spending = self.ws.Range("LastMonthSpend").Value
-        maximum_days_last_month = last_day_last_month().day
-        self.ws.Range("LastMonthAvSpending").Value = maximum_days_last_month
+        maximum_days_last_month = self.get_validation_last_month_end_date().day
+        self.ws.Range("LastMonthAvSpending").Value = last_month_spending / maximum_days_last_month
 
     def spending_per_category_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -465,7 +456,7 @@ class Backend:
 
 def tester():
     test = Backend()
-    test.monthly_spending_block()
+    test.monthly_balance_and_saving_block()
 
 
 if __name__ == '__main__':

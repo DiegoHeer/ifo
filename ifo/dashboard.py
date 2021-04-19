@@ -1,3 +1,5 @@
+import calendar
+
 import pandas as pd
 import xlwings as xw
 from xlwings import constants as xw_constants
@@ -39,10 +41,6 @@ class Dashboard:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
 
-    def fill_in_data_validation_cells(self):
-        # Takes the specific variable list and updates the data validation list of the specific named range cell
-        pass
-
     def get_database_dataframe(self):
         # Gets the dataframe by using the Database module functions
         with database.Database() as data:
@@ -58,45 +56,64 @@ class Dashboard:
         if df is None:
             df = self.get_database_dataframe()
 
+        # Function for obtaining account validation
+        def get_account_validation(dataframe, account_type):
+            account_list = dataframe['Input Account'].tolist() + dataframe['Output Account'].tolist()
+
+            # Remove duplicates from list
+            account_list = list(set(account_list))
+
+            # Remove blank items from list
+            account_list = list(filter(None, account_list))
+
+            filtered_account_list = list()
+            for account in account_list:
+                if account_type == "saving":
+                    if "saving" in account:
+                        filtered_account_list.append(account)
+                else:
+                    if "saving" not in account:
+                        filtered_account_list.append(account)
+
+            # Sort the filtered account list
+            filtered_account_list.sort()
+
+            return filtered_account_list
+
         # Get column of dataframe and change it into a list
         filtered_validation_list = list()
         if validation_type == "YearValidation":
             validation_list = df['Date'].tolist()
 
-            for value in list(set(validation_list)):
-                year = datetime.strptime(value, "%Y=%m-%d").year
+            # Filter out the years
+            for value in validation_list:
+                year = datetime.strptime(value, "%Y-%m-%d").year
                 filtered_validation_list.append(year)
 
+            # Remove the duplicates from the filtered validation list and sort it
+            filtered_validation_list = list(set(filtered_validation_list))
+
+            # Add one year extra to the list
+            filtered_validation_list.append(filtered_validation_list[-1] + 1)
+
+            # Sort the validation list
+            filtered_validation_list.sort()
+
         elif validation_type == "MonthValidation":
-            validation_list = df['Date'].tolist()
+            filtered_validation_list = [month for index, month in enumerate(calendar.month_name)][1:]
 
-            for value in list(set(validation_list)):
-                month = datetime.strptime(value, "%Y=%m-%d").month
-                filtered_validation_list.append(month)
+        elif validation_type == "CheckingAccountValidation":
+            filtered_validation_list = get_account_validation(df, "checking")
 
-        elif validation_type == "MainBankValidation":
-            validation_list = df['Input Bank'].tolist() + df['Output Bank'].tolist()
-
-            for value in list(set(validation_list)):
-                if not value.contains("saving"):
-                    filtered_validation_list.append(value)
-
-        elif validation_type == "SavingBankValidation":
-            validation_list = df['Input Bank'].tolist() + df['Output Bank'].tolist()
-
-            for value in list(set(validation_list)):
-                if value.contains("saving"):
-                    filtered_validation_list.append(value)
+        elif validation_type == "SavingAccountValidation":
+            filtered_validation_list = get_account_validation(df, "saving")
 
         else:
             # The last option would be currency
             filtered_validation_list = list(set(df["Currency"].tolist()))
 
-        # Sort the list
-        filtered_validation_list.sort()
-        self.validation_list = filtered_validation_list
-
         # Return the list
+        self.validation_list = filtered_validation_list
         return self.validation_list
 
     def data_validation_update(self, validation_type, validation_list=None):
@@ -132,7 +149,13 @@ class Dashboard:
         # Creates the dictionary and extracts the values from the Dashboard
         current_validation_values_dict = dict()
         for validation_type in self.validation_type_list:
-            current_validation_values_dict[validation_type] = self.ws.Range(validation_type).Value
+            validation_value = self.ws.Range(validation_type).Value
+
+            # For validation values that are float, convert them into integer
+            if type(validation_value) is float:
+                validation_value = int(validation_value)
+
+            current_validation_values_dict[validation_type] = validation_value
 
         return current_validation_values_dict
 
@@ -156,3 +179,12 @@ class Dashboard:
 
         # Update the last entry date in the dashboard
         self.ws.Range("LastTransactionEntry").Value = last_date.strftime('%d-%m-%Y')
+
+
+def tester():
+    test = Dashboard()
+    print(test.get_all_current_data_validation_selections())
+
+
+if __name__ == '__main__':
+    tester()
