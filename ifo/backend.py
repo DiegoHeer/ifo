@@ -1,14 +1,17 @@
 from os.path import join
 import pathlib
+
+import pandas as pd
 import xlwings as xw
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 import calendar
 
 import database
+import dashboard
 
 
-def get_unfiltered_database(df):
+def get_unfiltered_database(df=None):
     # Function gets the original database if none is provided in the parent method/function
     if df is None:
         with database.Database() as data:
@@ -25,6 +28,24 @@ def filter_dataframe(unfiltered_df, filter_dict):
     return filtered_df
 
 
+def get_all_dashboard_validation_selections():
+    db = dashboard.Dashboard()
+    return db.get_all_current_data_validation_selections()
+
+
+def get_earliest_dataframe_date(df=None):
+    # Check if database dataframe is provided. If not, gets it
+    df = get_unfiltered_database(df)
+
+    # Convert date column of dataframe into datetime format
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Get the latest date
+    earliest_date = df['Date'].min()
+
+    return earliest_date
+
+
 class Backend:
 
     def __init__(self):
@@ -34,6 +55,12 @@ class Backend:
         # xlwings parameters
         self.wb = xw.Book(self.wb_path)
         self.ws = self.wb.sheets["Backend"].api
+
+        # Validation selections from Dashboard
+        self.dashboard_selection_dict = get_all_dashboard_validation_selections()
+
+        # Get the earliest dataframe date (necessary for calculating balances
+        self.earliest_df_date = get_earliest_dataframe_date()
 
     def __enter__(self):
         return self
@@ -70,7 +97,7 @@ class Backend:
                            output_account=None, input_account_type=None, output_account_type=None):
         # Creates a dictionary that serves a filter to gather a defined dataframe to extract information
         filter_dict = dict()
-        filter_dict['Currency'] = self.wb.sheets["Dashboard"].api.Range("CurrencyValidation").Value
+        filter_dict['Currency'] = self.dashboard_selection_dict['CurrencyValidation']
         filter_dict['Start Date'] = start_date
         filter_dict['End Date'] = end_date
 
@@ -105,11 +132,10 @@ class Backend:
         return filtered_df[sum_column].sum()
 
     def get_account_balance(self, unfiltered_df, month_selection, account):
+        start_date = self.earliest_df_date
         if month_selection == "this month":
-            start_date = self.get_validation_start_date()
             end_date = self.get_validation_end_date()
         else:
-            start_date = self.get_validation_last_month_start_date()
             end_date = self.get_validation_last_month_end_date()
 
         input_value = self.get_sum_value_filtered_df(unfiltered_df, "Input Value", start_date=start_date,
@@ -121,11 +147,11 @@ class Backend:
         return input_value - output_value
 
     def get_total_balance(self, unfiltered_df, month_selection, account_type):
+
+        start_date = self.earliest_df_date
         if month_selection == "this month":
-            start_date = self.get_validation_start_date()
             end_date = self.get_validation_end_date()
         else:
-            start_date = self.get_validation_last_month_start_date()
             end_date = self.get_validation_last_month_end_date()
 
         input_value = self.get_sum_value_filtered_df(unfiltered_df, "Input Value", start_date=start_date,
@@ -136,49 +162,33 @@ class Backend:
 
         return input_value - output_value
 
-    def monthly_spending_block(self, unfiltered_df=None):
+    def monthly_spending_earning_block(self, transaction_type, unfiltered_df=None):
         # Updates the values in the cells related to the specific function named topic
 
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
-        # Calculate the spending value of this month
-        spending_this_month = self.get_sum_value_filtered_df(unfiltered_df, "Output Value",
-                                                             start_date=self.get_validation_start_date(),
-                                                             end_date=self.get_validation_end_date(),
-                                                             transaction_type='spending')
+        if transaction_type == "spending":
+            parameter_id = "Spend"
+            sum_column = "Output Value"
+        else:
+            parameter_id = "Earned"
+            sum_column = "Input Value"
 
-        # Calculate the spending from last month
-        spending_last_month = self.get_sum_value_filtered_df(unfiltered_df, "Output Value",
-                                                             start_date=self.get_validation_last_month_start_date(),
-                                                             end_date=self.get_validation_last_month_end_date(),
-                                                             transaction_type='spending')
+        # Calculate the value this month for the transaction type
+        value_this_month = self.get_sum_value_filtered_df(unfiltered_df, sum_column,
+                                                          start_date=self.get_validation_start_date(),
+                                                          end_date=self.get_validation_end_date(),
+                                                          transaction_type=transaction_type)
 
-        # Fill in the backend sheet with calculations
-        self.ws.Range('ThisMonthSpend').Value = spending_this_month
-        self.ws.Range('LastMonthSpend').Value = spending_last_month
-
-    def monthly_earning_block(self, unfiltered_df=None):
-        # Updates the values in the cells related to the specific function named topic
-
-        # Check if database dataframe is provided. If not, gets it
-        unfiltered_df = get_unfiltered_database(unfiltered_df)
-
-        # Calculate the spending value of this month
-        earning_this_month = self.get_sum_value_filtered_df(unfiltered_df, "Input Value",
-                                                            start_date=self.get_validation_start_date(),
-                                                            end_date=self.get_validation_end_date(),
-                                                            transaction_type='earning')
-
-        # Calculate the spending from last month
-        earning_last_month = self.get_sum_value_filtered_df(unfiltered_df, "Input Value",
-                                                            start_date=self.get_validation_last_month_start_date(),
-                                                            end_date=self.get_validation_last_month_end_date(),
-                                                            transaction_type='earning')
+        value_last_month = self.get_sum_value_filtered_df(unfiltered_df, sum_column,
+                                                          start_date=self.get_validation_last_month_start_date(),
+                                                          end_date=self.get_validation_last_month_end_date(),
+                                                          transaction_type=transaction_type)
 
         # Fill in the backend sheet with calculations
-        self.ws.Range('ThisMonthEarned').Value = earning_this_month
-        self.ws.Range('LastMonthEarned').Value = earning_last_month
+        self.ws.Range(f'ThisMonth{parameter_id}').Value = value_this_month
+        self.ws.Range(f'LastMonth{parameter_id}').Value = value_last_month
 
     def monthly_balance_and_saving_block(self, unfiltered_df=None, saving_bool=False):
         # Updates the values in the cells related to the specific function named topic
@@ -189,9 +199,11 @@ class Backend:
         # Defines parameters based on the type of block that will be updated: checking or saving
         if saving_bool is True:
             id_parameter = "Saving"
+            id_parameter2 = id_parameter
             account_type = 'saving accounts'
         else:
             id_parameter = "Balance"
+            id_parameter2 = "Checking"
             account_type = 'checking accounts'
 
         # First calculation is the total balance of the month, excluded saving accounts
@@ -205,43 +217,20 @@ class Backend:
         self.ws.Range('ThisMonthTotal' + id_parameter).Value = balance_value_this_month
         self.ws.Range('LastMonthTotal' + id_parameter).Value = balance_value_last_month
 
-        # Find out the most used bank account in the last 6 months
-        # Define first the start and end date for the filter
-        end_date = datetime.today().date()
-        start_date = end_date - relativedelta(months=6)
+        # Perform the same tasks but then for specific accounts
+        for i, named_range in enumerate([f"MostUsed{id_parameter2}Account", f"{id_parameter2}AccountValidation",
+                                         f"{id_parameter2}AccountValidation2"]):
+            # Get the account
+            account = self.dashboard_selection_dict[named_range]
 
-        # Get a filtered dataframe from this 6 months (in the right currency)
-        filter_dict = self.create_filter_dict(start_date=start_date, end_date=end_date)
-        filtered_df = filter_dataframe(unfiltered_df, filter_dict)
+            # Now get the balance for this account
+            balance_account_this_month = self.get_account_balance(unfiltered_df, "this month",
+                                                                  account=account)
+            balance_account_last_month = self.get_account_balance(unfiltered_df, "last month",
+                                                                  account=account)
 
-        # Calculate the frequency of all the accounts
-        account_frequency_dict = filtered_df['Output Account'].value_counts().to_dict()
-
-        # Get the most used account
-        most_used_account = max(account_frequency_dict, key=account_frequency_dict.get)
-
-        # Now get the balance for this account
-        balance_most_used_account_this_month = self.get_account_balance(unfiltered_df, "this month",
-                                                                        account=most_used_account)
-        balance_most_used_account_last_month = self.get_account_balance(unfiltered_df, "last month",
-                                                                        account=most_used_account)
-
-        # Fill in the backend sheet with the balances of the most used account
-        self.ws.Range(f'MostUsed{id_parameter}Account').Value = most_used_account
-        self.ws.Range(f'ThisMonth{id_parameter}1').Value = balance_most_used_account_this_month
-        self.ws.Range(f'LastMonth{id_parameter}1').Value = balance_most_used_account_last_month
-
-        # Fill in for the selected accounts
-        for i in range(1, 3):
-            selected_account = self.ws.Range(f"Selected{id_parameter}Account{i}").Value
-
-            balance_selected_account_this_month = self.get_account_balance(unfiltered_df, "this month",
-                                                                           account=selected_account)
-            balance_selected_account_last_month = self.get_account_balance(unfiltered_df, "last month",
-                                                                           account=selected_account)
-
-            self.ws.Range(f'ThisMonth{id_parameter}{i + 1}').Value = balance_selected_account_this_month
-            self.ws.Range(f'LastMonth{id_parameter}{i + 1}').Value = balance_selected_account_last_month
+            self.ws.Range(f'ThisMonth{id_parameter}{i + 1}').Value = balance_account_this_month
+            self.ws.Range(f'LastMonth{id_parameter}{i + 1}').Value = balance_account_last_month
 
     def week_quarter_spending_and_investment_block(self, unfiltered_df=None, investment_bool=False):
         # Updates the values in the cells related to the specific function named topic
@@ -395,8 +384,8 @@ class Backend:
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
         # Calculate the total value of investments made for stocks and bonds until month and year validation
-        start_date = unfiltered_df['Date'].min()
-        end_date = self.get_validation_end_date()
+        inv_start_date = unfiltered_df['Date'].min()
+        inv_end_date = self.get_validation_end_date()
 
         # General function for obtaining the total invested value for bonds and stocks
         def total_invested_value(ws, dataframe, start_date, end_date, category, output_range_name):
@@ -408,15 +397,15 @@ class Backend:
             ws.Range(output_range_name).Value = output_value - input_value
 
         # Bonds total invested value
-        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "bonds", "TotalInvestedBonds")
+        total_invested_value(self.ws, unfiltered_df, inv_start_date, inv_end_date, "bonds", "TotalInvestedBonds")
 
         # Stocks total invested value
-        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "stocks", "TotalInvestedStocks")
+        total_invested_value(self.ws, unfiltered_df, inv_start_date, inv_end_date, "stocks", "TotalInvestedStocks")
 
         # Obtain the total investments for one month before the validation end date
-        end_date = end_date - relativedelta(months=1)
-        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "bonds", "TotalInvestedBonds")
-        total_invested_value(self.ws, unfiltered_df, start_date, end_date, "stocks", "TotalInvestedStocks")
+        inv_end_date = inv_end_date - relativedelta(months=1)
+        total_invested_value(self.ws, unfiltered_df, inv_start_date, inv_end_date, "bonds", "TotalInvestedBonds")
+        total_invested_value(self.ws, unfiltered_df, inv_start_date, inv_end_date, "stocks", "TotalInvestedStocks")
 
     def spending_per_type_chart(self, unfiltered_df=None):
         # Updates the values of this topic, which updates the related chart displayed in the Dashboard
@@ -456,7 +445,12 @@ class Backend:
 
 def tester():
     test = Backend()
-    test.monthly_balance_and_saving_block()
+    df = get_unfiltered_database()
+    test.monthly_spending_earning_block(transaction_type="spending", unfiltered_df=df)
+    test.monthly_spending_earning_block(transaction_type="earning", unfiltered_df=df)
+
+    test.monthly_balance_and_saving_block(saving_bool=False, unfiltered_df=df)
+    test.monthly_balance_and_saving_block(saving_bool=True, unfiltered_df=df)
 
 
 if __name__ == '__main__':

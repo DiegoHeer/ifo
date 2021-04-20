@@ -17,8 +17,10 @@ class Dashboard:
         self.validation_type_list = ["CurrencyValidation",
                                      "YearValidation",
                                      "MonthValidation",
+                                     "MostUsedCheckingAccount",
                                      "CheckingAccountValidation",
                                      "CheckingAccountValidation2",
+                                     "MostUsedSavingAccount",
                                      "SavingAccountValidation",
                                      "SavingAccountValidation2"]
 
@@ -184,14 +186,14 @@ class Dashboard:
             df = self.get_database_dataframe()
 
         # Apply filter to database to obtain all dates related to the currency
-        df = df.loc[df["Currency"] == self.currency_selection]
+        df = df.loc[df["Currency"] == self.currency_selection].copy()
 
         # Search for last transaction date
-        df['Date'] = pd.to_datetime(df['Date'])
+        df["Date"] = pd.to_datetime(df["Date"])
         last_date = df['Date'].max()
 
         # Update the last entry date in the dashboard
-        self.ws.Range("LastTransactionEntry").Value = last_date.strftime('%d-%m-%Y')
+        self.ws.Range("LastTransactionEntry").Value = last_date.strftime('%x %X')
 
     def fill_in_most_used_account(self, account_type, df=None):
 
