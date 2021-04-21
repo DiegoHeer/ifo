@@ -15,6 +15,7 @@ class Dashboard:
     def __init__(self):
         # Main data validation cell names in list format
         self.validation_type_list = ["CurrencyValidation",
+                                     "InvestmentCurrencyValidation",
                                      "YearValidation",
                                      "MonthValidation",
                                      "MostUsedCheckingAccount",
@@ -131,12 +132,12 @@ class Dashboard:
         self.validation_list = filtered_validation_list
         return self.validation_list
 
-    def data_validation_update(self, validation_type, validation_list=None):
+    def data_validation_update(self, named_range, validation_list=None):
         # Updates all data based on general filters, like currency, year or month
 
         # If there is no validation list as input, it gets a list
         if validation_list is None:
-            validation_list = self.get_data_validation_list(validation_type)
+            validation_list = self.get_data_validation_list(named_range)
 
         # Obtain the constants required to modify the data validation cells
         dv_type = xw_constants.DVType.xlValidateList
@@ -144,7 +145,7 @@ class Dashboard:
         dv_operator = xw_constants.FormatConditionOperator.xlEqual
 
         # Get validation named cell range
-        validation_range = self.ws.Range(validation_type)
+        validation_range = self.ws.Range(named_range)
 
         # Get the current value on display of the data validation cell, before modifying it
         current_display_value = validation_range.Value
@@ -239,13 +240,15 @@ class Dashboard:
 
 
 def tester():
-    # test = Dashboard()
+    test = Dashboard()
     # print(test.get_data_validation_list("YearValidation"))
     # print(test.get_all_current_data_validation_selections())
 
     # test.data_validation_update("CheckingAccountValidation")
     # test.data_validation_update("SavingAccountValidation")
     # print(test.get_all_current_data_validation_selections())
+
+    # test.data_validation_update("InvestmentCurrencyValidation")
 
     # test.fill_in_most_used_account("checking")
     # test.fill_in_most_used_account("saving")

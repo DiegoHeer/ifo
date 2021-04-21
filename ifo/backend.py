@@ -94,7 +94,8 @@ class Backend:
         return validation_start_date - relativedelta(days=1)
 
     def create_filter_dict(self, start_date, end_date, transaction_type=None, category=None, input_account=None,
-                           output_account=None, input_account_type=None, output_account_type=None):
+                           output_account=None, input_account_type=None, output_account_type=None,
+                           bool_inv_currency=False):
         # Creates a dictionary that serves a filter to gather a defined dataframe to extract information
         filter_dict = dict()
         filter_dict['Currency'] = self.dashboard_selection_dict['CurrencyValidation']
@@ -103,6 +104,8 @@ class Backend:
 
         if transaction_type is not None:
             filter_dict['Type'] = transaction_type
+            if bool_inv_currency is True:
+                filter_dict['Currency'] = self.dashboard_selection_dict['InvestmentCurrencyValidation']
         if category is not None:
             filter_dict['Category'] = category
         if input_account is not None:
@@ -118,12 +121,13 @@ class Backend:
 
     def get_sum_value_filtered_df(self, unfiltered_df, sum_column, start_date, end_date, transaction_type=None,
                                   category=None, input_account=None, output_account=None, input_account_type=None,
-                                  output_account_type=None):
+                                  output_account_type=None, bool_inv_currency=False):
         # This function provides the sum value of a column of a filtered dataframe
 
         # Create a dictionary of filters required
         filter_dict = self.create_filter_dict(start_date, end_date, transaction_type, category, input_account,
-                                              output_account, input_account_type, output_account_type)
+                                              output_account, input_account_type, output_account_type,
+                                              bool_inv_currency)
 
         # Filters the dataframe with the defined filters
         filtered_df = filter_dataframe(unfiltered_df, filter_dict)
@@ -232,43 +236,55 @@ class Backend:
             self.ws.Range(f'ThisMonth{id_parameter}{i + 1}').Value = balance_account_this_month
             self.ws.Range(f'LastMonth{id_parameter}{i + 1}').Value = balance_account_last_month
 
-    def week_quarter_spending_and_investment_block(self, unfiltered_df=None, investment_bool=False):
+    def week_quarter_spending_and_investment_block(self, unfiltered_df=None, bool_inv=False):
         # Updates the values in the cells related to the specific function named topic
 
         # Check if database dataframe is provided. If not, gets it
         unfiltered_df = get_unfiltered_database(unfiltered_df)
 
         # Defines parameters based on the type of block that will be updated: checking or saving
-        if investment_bool is True:
+        if bool_inv is True:
             focus_parameter = "MonthInvestment"
             transaction_type = "investment"
-            sum_column = "Input Value"
         else:
             focus_parameter = "WeekSpending"
             transaction_type = "spending"
-            sum_column = "Output Value"
 
-        # Calculate current week spending or month investment
+        # Calculate week spending or month investment
         today = datetime.today().date()
-        start_date = today - timedelta(days=today.weekday())
-        end_date = start_date + timedelta(days=6)
+        month_start_date = self.get_validation_start_date()
+        month_end_date = self.get_validation_end_date()
 
-        period_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column=sum_column,
-                                                      start_date=start_date,
-                                                      end_date=end_date,
-                                                      transaction_type=transaction_type)
+        # If month and year validation in the same timeframe as today, it takes as ref date the latest validation date
+        if month_start_date <= today <= month_end_date:
+            ref_date = today
+        else:
+            ref_date = month_end_date
+
+        # Start and end date depends on the transaction type
+        if transaction_type == "spending":
+            start_date = ref_date - timedelta(days=ref_date.weekday())
+            end_date = start_date + timedelta(days=6)
+        else:
+            start_date = month_start_date
+            end_date = month_end_date
+
+        # Sum calculation
+        period_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column="Output Value",
+                                                      start_date=start_date, end_date=end_date,
+                                                      transaction_type=transaction_type, bool_inv_currency=bool_inv)
 
         self.ws.Range(focus_parameter).Value = period_value
 
-        # Calculate and fill in quarter spending or investment this year
+        # Calculate and fill in quarter spending or investment from selected validation year
         for i in range(1, 5):
-            start_date = datetime(year=datetime.today().year, month=(3 * i - 2), day=1).date()
+            start_date = datetime(year=ref_date.year, month=(3 * i - 2), day=1).date()
             end_date = start_date + relativedelta(months=3) - timedelta(days=1)
 
-            quarter_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column=sum_column,
-                                                           start_date=start_date,
-                                                           end_date=end_date,
-                                                           transaction_type=transaction_type)
+            quarter_value = self.get_sum_value_filtered_df(unfiltered_df, sum_column="Output Value",
+                                                           start_date=start_date, end_date=end_date,
+                                                           transaction_type=transaction_type,
+                                                           bool_inv_currency=bool_inv)
 
             self.ws.Range(f"Quarter{i}{transaction_type.capitalize()}").Value = quarter_value
 
@@ -445,12 +461,15 @@ class Backend:
 
 def tester():
     test = Backend()
-    df = get_unfiltered_database()
-    test.monthly_spending_earning_block(transaction_type="spending", unfiltered_df=df)
-    test.monthly_spending_earning_block(transaction_type="earning", unfiltered_df=df)
+    # df = get_unfiltered_database()
+    # test.monthly_spending_earning_block(transaction_type="spending", unfiltered_df=df)
+    # test.monthly_spending_earning_block(transaction_type="earning", unfiltered_df=df)
+    #
+    # test.monthly_balance_and_saving_block(saving_bool=False, unfiltered_df=df)
+    # test.monthly_balance_and_saving_block(saving_bool=True, unfiltered_df=df)
 
-    test.monthly_balance_and_saving_block(saving_bool=False, unfiltered_df=df)
-    test.monthly_balance_and_saving_block(saving_bool=True, unfiltered_df=df)
+    test.week_quarter_spending_and_investment_block(bool_inv=True)
+    # test.week_quarter_spending_and_investment_block()
 
 
 if __name__ == '__main__':
