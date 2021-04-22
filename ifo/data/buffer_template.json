@@ -1,0 +1,1509 @@
+{
+  "ThisMonthSpend": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "LastMonthSpend": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "last month"
+  },
+  "ThisMonthEarned": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "LastMonthEarned": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "last month"
+  },
+  "ThisMonthTotalSaving": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until month"
+  },
+  "ThisMonthTotalBalance": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until month"
+  },
+  "LastMonthTotalSaving": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until last month"
+  },
+  "LastMonthTotalBalance": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until last month"
+  },
+  "ThisMonthBalance1": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until month",
+    "ref_named_range": "MostUsedCheckingAccount"
+  },
+  "ThisMonthBalance2": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until month",
+    "ref_named_range": "CheckingAccountValidation"
+  },
+  "ThisMonthBalance3": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until month",
+    "ref_named_range": "CheckingAccountValidation2"
+  },
+  "ThisMonthSaving1": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until month",
+    "ref_named_range": "MostUsedSavingAccount"
+  },
+  "ThisMonthSaving2": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until month",
+    "ref_named_range": "SavingAccountValidation"
+  },
+  "ThisMonthSaving3": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until month",
+    "ref_named_range": "SavingAccountValidation2"
+  },
+  "LastMonthSaving1": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until last month",
+    "ref_named_range": "MostUsedSavingAccount"
+  },
+  "LastMonthSaving2": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until last month",
+    "ref_named_range": "SavingAccountValidation"
+  },
+  "LastMonthSaving3": {
+    "calc_type": "balance sum",
+    "ref_type": "saving",
+    "timeframe": "until last month",
+    "ref_named_range": "SavingAccountValidation2"
+  },
+  "LastMonthBalance1": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until last month",
+    "ref_named_range": "MostUsedCheckingAccount"
+  },
+  "LastMonthBalance2": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until last month",
+    "ref_named_range": "CheckingAccountValidation"
+  },
+  "LastMonthBalance3": {
+    "calc_type": "balance sum",
+    "ref_type": "balance",
+    "timeframe": "until last month",
+    "ref_named_range": "CheckingAccountValidation2"
+  },
+  "MonthInvestment": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "WeekSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "week"
+  },
+  "Quarter1Investment": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "quarter1"
+  },
+  "Quarter2Investment": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "quarter2"
+  },
+  "Quarter3Investment": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "quarter3"
+  },
+  "Quarter4Investment": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "quarter4"
+  },
+  "Quarter1Spending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "quarter1"
+  },
+  "Quarter2Spending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "quarter2"
+  },
+  "Quarter3Spending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "quarter3"
+  },
+  "Quarter4Spending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "quarter4"
+  },
+  "AverageSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "MaximalSpending": {
+    "calc_type": "max",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "MinimalSpending": {
+    "calc_type": "min",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "TodaySpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "day"
+  },
+  "LastMonthAvSpending": {
+    "calc_type": "average",
+    "ref_type": "spending",
+    "timeframe": "last month"
+  },
+  "SpendingClothesMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingClothesMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingCreditCardPaymentMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGadgetsMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTaxesMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingLeisureMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSupermarketMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingFoodMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingOthersMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingTransportMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingRentMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMobileMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingSchoolSuppliesMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingHealthMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingGymMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingInvestmentLossMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingVacationMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "SpendingMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "month"
+  },
+  "EarningMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "EarningMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "ChangeMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum1": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum2": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum3": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum4": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum5": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum6": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum7": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum8": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum9": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum10": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum11": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "InvestmentMonthNum12": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "month"
+  },
+  "ClothesYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "CreditCardPaymentYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "GadgetsYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "TaxesYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "LeisureYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "SupermarketYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "FoodYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "OthersYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "TransportYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "RentYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "MobileYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "SchoolSuppliesYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "HealthYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "GymYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "InvestmentLossYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "VacationYearTotalSpending": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "SpendingYearTotal": {
+    "calc_type": "sum",
+    "ref_type": "spending",
+    "timeframe": "year"
+  },
+  "EarningYearTotal": {
+    "calc_type": "sum",
+    "ref_type": "earning",
+    "timeframe": "year"
+  },
+  "ChangeYearTotal": {
+    "calc_type": "sum",
+    "ref_type": "change",
+    "timeframe": "year"
+  },
+  "InvestmentYearTotal": {
+    "calc_type": "sum",
+    "ref_type": "investment",
+    "timeframe": "year"
+  },
+  "TotalInvestedBonds": {
+    "calc_type": "inverse sum",
+    "ref_type": "investment",
+    "timeframe": "until month"
+  },
+  "TotalInvestedStocks": {
+    "calc_type": "inverse sum",
+    "ref_type": "investment",
+    "timeframe": "until month"
+  },
+  "TotalInvestedLastMonthBonds": {
+    "calc_type": "inverse sum",
+    "ref_type": "investment",
+    "timeframe": "until last month"
+  },
+  "TotalInvestedLastMonthStocks": {
+    "calc_type": "inverse sum",
+    "ref_type": "investment",
+    "timeframe": "until last month"
+  }
+}
