@@ -1,6 +1,6 @@
 from os.path import join
 import pathlib
-
+import json
 import pandas as pd
 import xlwings as xw
 from datetime import datetime, timedelta
@@ -46,6 +46,18 @@ def get_earliest_dataframe_date(df=None):
     return earliest_date
 
 
+def load_json_file(json_path):
+    with open(json_path, 'r', encoding='utf8') as file:
+        json_file = json.load(file)
+
+    return json_file
+
+
+def save_json_file(json_path, dictionary):
+    with open(json_path, 'w', encoding='utf8') as file:
+        json.dump(dictionary, file, indent=4, sort_keys=False, default=str, ensure_ascii=False)
+
+
 class Backend:
 
     def __init__(self):
@@ -61,6 +73,10 @@ class Backend:
 
         # Get the earliest dataframe date (necessary for calculating balances
         self.earliest_df_date = get_earliest_dataframe_date()
+
+        # Buffer and buffer template json file paths
+        self.buffer_path = join(pathlib.Path(__file__).parent.absolute(), "data", "buffer.json")
+        self.template_path = join(pathlib.Path(__file__).parent.absolute(), "data", "buffer_template.json")
 
     def __enter__(self):
         return self
@@ -510,6 +526,49 @@ class Backend:
                 named_range = f"{transaction.capitalize()}MonthNum{month_num + 1}"
                 self.ws.Range(named_range).Value = transaction_sum
 
+    def collect_buffer_data(self):
+        # This function uses the buffer template to collect all values from named ranges in the backend sheet.
+        # The data is then stored in the buffer.json file for future use
+        # The primary motive of this is to reduce the amount calculations, increasing performance
+
+        # Get relevant validation selections
+        currency = self.dashboard_selection_dict["CurrencyValidation"]
+        year = str(self.dashboard_selection_dict["YearValidation"])
+        month = self.dashboard_selection_dict["MonthValidation"]
+
+        # Get the buffer template dictionary
+        template_dict = load_json_file(self.template_path)
+
+        # Load the buffer json file and get that dictionary
+        buffer_dict = load_json_file(self.buffer_path)
+
+        # Check if buffer dictionary has the keys required
+        if currency not in buffer_dict:
+            buffer_dict[currency] = {}
+        if year not in buffer_dict[currency]:
+            buffer_dict[currency][year] = {}
+        if month not in buffer_dict[currency][year]:
+            buffer_dict[currency][year][month] = {}
+
+        # Fill in the buffer dictionary with all the data from the backend sheet
+        for named_range in template_dict.keys():
+            buffer_dict[currency][year][month][named_range] = self.ws.Range(named_range).Value
+
+        # Save the buffer json file
+        save_json_file(self.buffer_path, buffer_dict)
+
+    def clear_buffer(self):
+        # Clears all content from buffer to refresh the data to be stored
+
+        # Get buffer dictionary from json file
+        buffer_dict = load_json_file(self.buffer_path)
+
+        # Clear buffer dictionary
+        buffer_dict.clear()
+
+        # Save dictionary in buffer json file
+        save_json_file(self.buffer_path, buffer_dict)
+
 
 def tester():
     test = Backend()
@@ -529,7 +588,10 @@ def tester():
 
     # test.recent_transactions_block()
 
-    test.transaction_per_type_chart()
+    # test.transaction_per_type_chart()
+
+    test.collect_buffer_data()
+    # test.clear_buffer()
 
 
 if __name__ == '__main__':
