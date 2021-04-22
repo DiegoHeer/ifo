@@ -569,6 +569,30 @@ class Backend:
         # Save dictionary in buffer json file
         save_json_file(self.buffer_path, buffer_dict)
 
+    def fill_backend_with_buffer_data(self):
+        # This function fills in all the relevant named ranges in the backend sheet with data from the buffer
+
+        # Get relevant validation selections
+        currency = self.dashboard_selection_dict["CurrencyValidation"]
+        year = str(self.dashboard_selection_dict["YearValidation"])
+        month = self.dashboard_selection_dict["MonthValidation"]
+
+        # Load the buffer json file and get that dictionary
+        buffer_dict = load_json_file(self.buffer_path)
+
+        # Checks first if the specific sub dictionary for the current validation selections exists
+        # If it doesn't exist, it will return with a false boolean. Else, it will fill in the backend sheet
+        if currency not in buffer_dict:
+            return False
+        elif year not in buffer_dict[currency]:
+            return False
+        elif month not in buffer_dict[currency][year]:
+            return False
+        else:
+            for named_range, value in buffer_dict[currency][year][month].items():
+                self.ws.Range(named_range).Value = value
+            return True
+
 
 def tester():
     test = Backend()
@@ -576,7 +600,7 @@ def tester():
     # test.monthly_spending_earning_block(transaction_type="spending", unfiltered_df=df)
     # test.monthly_spending_earning_block(transaction_type="earning", unfiltered_df=df)
     #
-    # test.monthly_balance_and_saving_block(saving_bool=False, unfiltered_df=df)
+    test.monthly_balance_and_saving_block(saving_bool=False)
     # test.monthly_balance_and_saving_block(saving_bool=True, unfiltered_df=df)
 
     # test.week_quarter_spending_and_investment_block(bool_inv=True)
@@ -590,9 +614,11 @@ def tester():
 
     # test.transaction_per_type_chart()
 
-    test.collect_buffer_data()
+    # test.collect_buffer_data()
     # test.clear_buffer()
+    # print(test.fill_backend_with_buffer_data())
 
 
 if __name__ == '__main__':
     tester()
+
